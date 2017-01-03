@@ -1,0 +1,15 @@
+{
+  "name": "igrica",
+  "version": "1.0.0",
+  "description": "Demo",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "http-server -a localhost -p 7979 -c-1 ./"
+  },
+  "author": "Milan Marjanovic",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.9.0",
+    "pixi.js": "^4.3.0"
+  }
+}
