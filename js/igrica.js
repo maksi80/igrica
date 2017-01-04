@@ -37,7 +37,7 @@ PIXI.loader.add('data', 'data/config.json')
 
 function createGame(loader,resources) {
 
-	renderer = PIXI.autoDetectRenderer(1000, 800, { backgroundColor: 0xA8B2A7 });
+	renderer = PIXI.autoDetectRenderer(800, 600, { backgroundColor: 0xA8B2A7 });
 	document.body.appendChild(renderer.view);
 	stage = new PIXI.Container();
 	createScene(resources);
@@ -73,18 +73,18 @@ function createScene(resources) {
 	data = resources.data.data;
 	var message = new PIXI.Text(data.betMessage, {fontSize: '15px', fontFamily: 'Arial',fill: '#ff0000',align: 'center'});
     message.x   = 560;
-    message.y   = 45;
+    message.y   = 60;
     stage.addChild(message);
 
     var credit  = new PIXI.Text('CREDIT:', {fontSize: '18px', fontFamily: 'Arial'});
     credit.x    = 550;
-    credit.y    = 10;
+    credit.y    = 30;
     stage.addChild(credit);
 
     creditValue = data.creditValue;
     creditValueShow = new PIXI.Text(creditValue, {fontSize: '18px', fontFamily: 'Arial'});
     creditValueShow.x   = 628;
-    creditValueShow.y   = 10;
+    creditValueShow.y   = 30;
     stage.addChild(creditValueShow);
 
     /*******spin btn ******************/
@@ -123,7 +123,7 @@ function createScene(resources) {
     stage.addChild(figuresBtnsContainer);
 
     sumBetNode = new PIXI.Text(parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator), {fontSize: '20px', fontWeight:'bold', fill: 0xFF1111});
-    sumBetNode.position.set(628, 42);
+    sumBetNode.position.set(628, 56);
     stage.addChild(sumBetNode);
 }
 
@@ -147,7 +147,6 @@ function changeFigure(){
 }
 
 function setSumBet(){
-	
     sumBetNode.text = parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator); 
 }
 
