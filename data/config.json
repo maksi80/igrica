@@ -1,6 +1,6 @@
 {
     "winMessage" : "Pobeda",
-    "betMessage": "Vas ulog:",
+    "betMessage": "Your stake:",
     "imgCredit": "assets/images/credit.png",
     "imgSlotSprite": "assets/images/slot.png",
     "imgSpinButton": "assets/images/spin_button.png",

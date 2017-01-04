@@ -31,6 +31,8 @@ var figures = null;
 var audio = null;
 var volume  = 1;
 var msg = null;
+var marks = {};
+var marks_lose = {};
 
 PIXI.loader.add('data', 'data/config.json')
 						//.on("progress", loadProgressHandler)
@@ -72,23 +74,23 @@ function animate() {
 
 function createScene(resources) {
 	data = resources.data.data;
-	var message = new PIXI.Text(data.betMessage, {fontSize: '15px',fill: '#ff0000',align: 'center'});
+	var message = new PIXI.Text(data.betMessage, {font: 'bold 20px Arial',fill: '#ff0000',align: 'center'});
     message.x   = 500;
     message.y   = 60;
     stage.addChild(message);
 
-    var credit  = new PIXI.Text('CREDIT:', {fontSize: '8px'});
-    credit.x    = 500;
+    var credit  = new PIXI.Text('CREDIT:', {font: 'bold 20px Arial',fill: '#000000'});
+    credit.x    = 530;
     credit.y    = 30;
     stage.addChild(credit);
 
-    msg  = new PIXI.Text('', {fontSize: '18px'});
+    msg  = new PIXI.Text('', {font: 'bold 20px Arial',fill: '#000000'});
     msg.x    = 560;
     msg.y    = 180;
     stage.addChild(msg);
 
     creditValue = data.creditValue;
-    creditValueShow = new PIXI.Text(creditValue, {fontSize: '12px', fontFamily: 'Arial'});
+    creditValueShow = new PIXI.Text(creditValue, {font: 'bold 20px Arial',fill: '#000000'});
     creditValueShow.x   = 620;
     creditValueShow.y   = 30;
     stage.addChild(creditValueShow);
@@ -128,7 +130,7 @@ function createScene(resources) {
     figuresBtnsContainer.position.set(50,30);
     stage.addChild(figuresBtnsContainer);
 
-    sumBetNode = new PIXI.Text(parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator), {fontSize: '20px', fontWeight:'bold', fill: 0xFF1111});
+    sumBetNode = new PIXI.Text(parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator), {font: 'bold 20px Arial',fill: '#ff0000',align: 'center'});
     sumBetNode.position.set(628, 60);
     stage.addChild(sumBetNode);
 }
@@ -156,20 +158,45 @@ function setSumBet(){
     sumBetNode.text = parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator); 
 }
 
-function showFigure(){
-    for( var j = 0; j < 3; j++) {
-	    for (var i = 0; i < slotNumber; i++) {
-	    	tile[j][i].tint = 16777215;
-	    }
-	}
-
+function showFigure(param) {
+	clear();
 	figures = figures_buttons[figureChoosen].figure;
 
 	for(var i in figures){
 		var coordinate = figures[i]; 
 		tile[coordinate.x][coordinate.y].tint = 0xFF00FF;
+		if(param == true){
+			//console.log(tile[coordinate.x][coordinate.y].x,tile[coordinate.x][coordinate.y].y);
+			marks[i] = new PIXI.Graphics();
+			marks[i].lineStyle(5, 0xA4CC00);
+			marks[i].drawCircle(100+tile[coordinate.x][coordinate.y].x+50, 120+tile[coordinate.x][coordinate.y].y+50, 40);
+			marks[i].endFill(); 
+			stage.addChild(marks[i]);
+		}else if(param == false) {
+			marks_lose[i] = new PIXI.Graphics();
+			marks_lose[i].lineStyle(5, 0xff0000);
+			marks_lose[i].moveTo(100+tile[coordinate.x][coordinate.y].x+5, 120+tile[coordinate.x][coordinate.y].y+5);
+        	marks_lose[i].lineTo(100+tile[coordinate.x][coordinate.y].x+100-5, 120+tile[coordinate.x][coordinate.y].y+100-5);
+        	stage.addChild(marks_lose[i]);
+		}
 	}
 
+	setTimeout( function() {
+		for(var i in figures){
+			stage.removeChild(marks[i]);
+			stage.removeChild(marks_lose[i]);
+			var coordinate = figures[i]; 
+			tile[coordinate.x][coordinate.y].tint = 16777215;
+		}
+	}, 2000);
+}
+
+function clear() {
+	for( var j = 0; j < 3; j++) {
+	    for (var i = 0; i < slotNumber; i++) {
+	    	tile[j][i].tint = 16777215;
+	    }
+	}
 }
 
 function generatePositions(resources) {
@@ -221,11 +248,12 @@ function checkWin(){
 		audio = null;
 		if(checkAllSame(figures_buttons[figureChoosen].figure)){
 			showMsg("You win!");
-			showFigure();
+			showFigure(true);
 			playSound('assets/sounds/win.mp3');
        		creditValue +=  parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator);
 		}else{
 			showMsg("Bad luck!");
+			showFigure(false);
 			creditValue -=  parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator)
 		}
 		setCredit(creditValue);
