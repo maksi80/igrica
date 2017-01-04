@@ -30,6 +30,7 @@ var initialPosition = [];
 var figures = null;
 var audio = null;
 var volume  = 1;
+var msg = null;
 
 PIXI.loader.add('data', 'data/config.json')
 						//.on("progress", loadProgressHandler)
@@ -71,25 +72,30 @@ function animate() {
 
 function createScene(resources) {
 	data = resources.data.data;
-	var message = new PIXI.Text(data.betMessage, {fontSize: '15px', fontFamily: 'Arial',fill: '#ff0000',align: 'center'});
-    message.x   = 560;
+	var message = new PIXI.Text(data.betMessage, {fontSize: '15px',fill: '#ff0000',align: 'center'});
+    message.x   = 500;
     message.y   = 60;
     stage.addChild(message);
 
-    var credit  = new PIXI.Text('CREDIT:', {fontSize: '18px', fontFamily: 'Arial'});
-    credit.x    = 550;
+    var credit  = new PIXI.Text('CREDIT:', {fontSize: '8px'});
+    credit.x    = 500;
     credit.y    = 30;
     stage.addChild(credit);
 
+    msg  = new PIXI.Text('', {fontSize: '18px'});
+    msg.x    = 560;
+    msg.y    = 180;
+    stage.addChild(msg);
+
     creditValue = data.creditValue;
-    creditValueShow = new PIXI.Text(creditValue, {fontSize: '18px', fontFamily: 'Arial'});
-    creditValueShow.x   = 628;
+    creditValueShow = new PIXI.Text(creditValue, {fontSize: '12px', fontFamily: 'Arial'});
+    creditValueShow.x   = 620;
     creditValueShow.y   = 30;
     stage.addChild(creditValueShow);
 
     /*******spin btn ******************/
     spinBtn = new PIXI.Sprite(PIXI.Texture.fromImage(data.imgSpinButton));
-    spinBtn.position.set(300, 150);
+    spinBtn.position.set(515, 95);
     spinBtn.interactive = true;
     spinBtn.on("click", spin);
     stage.addChild(spinBtn);
@@ -123,7 +129,7 @@ function createScene(resources) {
     stage.addChild(figuresBtnsContainer);
 
     sumBetNode = new PIXI.Text(parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator), {fontSize: '20px', fontWeight:'bold', fill: 0xFF1111});
-    sumBetNode.position.set(628, 56);
+    sumBetNode.position.set(628, 60);
     stage.addChild(sumBetNode);
 }
 
@@ -197,6 +203,7 @@ function spin() {
 	if(!hasMoney()){
         alert("You don't have money for play"); return;
     }
+    showMsg("");
     playSound('assets/sounds/spin1.mp3');
     this._texture = PIXI.Texture.fromImage(data.imgSpinButtonDisabled);
     this.interactive = false;
@@ -213,10 +220,12 @@ function checkWin(){
 		audio.pause();
 		audio = null;
 		if(checkAllSame(figures_buttons[figureChoosen].figure)){
+			showMsg("You win!");
 			showFigure();
 			playSound('assets/sounds/win.mp3');
        		creditValue +=  parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator);
 		}else{
+			showMsg("Bad luck!");
 			creditValue -=  parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator)
 		}
 		setCredit(creditValue);
@@ -255,4 +264,8 @@ function playSound(x) {
     audio       = new Audio(x);
     audio.volume    = volume;
     audio.play();
+}
+
+function showMsg(message){
+	msg.text = message;
 }
