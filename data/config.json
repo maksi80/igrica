@@ -64,8 +64,8 @@
         }
     },
     "figures_buttons": {
-        "1": {
-            "id": 1,
+        "A": {
+            "id": "A",
             "multiplicator": 1,
             "position": {
                 "x": 200,
@@ -83,24 +83,12 @@
                 {
                     "x": 0,
                     "y": 1 
-                },
-                {
-                    "x": 0,
-                    "y": 2 
-                },
-                {
-                    "x": 1,
-                    "y": 0 
-                },
-                {
-                    "x": 2,
-                    "y": 0
                 }
             ]
         },
-        "3": {
-            "id": 3,
-            "multiplicator": 3,
+        "B": {
+            "id": "B",
+            "multiplicator": 2,
             "position": {
                 "x": 250,
                 "y": 0
@@ -121,20 +109,12 @@
                 {
                     "x": 2,
                     "y": 2 
-                },
-                {
-                    "x": 1,
-                    "y": 3 
-                },
-                {
-                    "x": 0,
-                    "y": 4
                 }
             ]
         },
-        "5": {
-            "id": 5,
-            "multiplicator": 5,
+        "C": {
+            "id": "C",
+            "multiplicator": 3,
             "position": {
                 "x": 300,
                 "y": 0
@@ -146,29 +126,25 @@
             "figure": [
                 {
                     "x": 0,
-                    "y": 0 
-                },
-                {
-                    "x": 1,
-                    "y": 1 
+                    "y": 2 
                 },
                 {
                     "x": 1,
                     "y": 2 
                 },
                 {
-                    "x": 1,
-                    "y": 3 
+                    "x": 2,
+                    "y": 2 
                 },
                 {
                     "x": 2,
-                    "y": 0
+                    "y": 3 
                 }
             ]
         },
-        "7": {
-            "id": 7,
-            "multiplicator": 7,
+        "D": {
+            "id": "D",
+            "multiplicator": 4,
             "position": {
                 "x": 350,
                 "y": 0
@@ -200,9 +176,9 @@
                 }
             ]
         },
-        "10": {
-            "id": 10,
-            "multiplicator": 10,
+        "E": {
+            "id": "E",
+            "multiplicator": 5,
             "position": {
                 "x": 400,
                 "y": 0

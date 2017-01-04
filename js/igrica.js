@@ -20,7 +20,7 @@ var creditValue 	= 0;
 var bets_buttons = {};
 var betChoosen = 5;
 var figures_buttons = {};
-var figureChoosen = 1;
+var figureChoosen = "A";
 var sumBetNode = null;
 var spinBtn  = null;
 
@@ -66,10 +66,8 @@ function animate() {
     }
 
     requestAnimationFrame(animate);
-
     renderer.render(stage);
 }
-
 
 function createScene(resources) {
 	data = resources.data.data;
@@ -77,10 +75,6 @@ function createScene(resources) {
     message.x   = 560;
     message.y   = 45;
     stage.addChild(message);
-
-    sumBetNode = new PIXI.Text(parseInt(betChoosen) * parseInt(figureChoosen), {fontSize: '20px', fontWeight:'bold', fill: 0xFF1111});
-    sumBetNode.position.set(628, 42);
-    stage.addChild(sumBetNode);
 
     var credit  = new PIXI.Text('CREDIT:', {fontSize: '18px', fontFamily: 'Arial'});
     credit.x    = 550;
@@ -127,6 +121,10 @@ function createScene(resources) {
     }
     figuresBtnsContainer.position.set(50,30);
     stage.addChild(figuresBtnsContainer);
+
+    sumBetNode = new PIXI.Text(parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator), {fontSize: '20px', fontWeight:'bold', fill: 0xFF1111});
+    sumBetNode.position.set(628, 42);
+    stage.addChild(sumBetNode);
 }
 
 function changeBet(){
@@ -145,12 +143,12 @@ function changeFigure(){
     figureChoosen = this.controlId;
     setSumBet();
     showFigure();
-    this._texture = PIXI.Texture.fromImage(figures_buttons[this.controlId].images.active);
+    this._texture = PIXI.Texture.fromImage(figures_buttons[figureChoosen].images.active);
 }
 
 function setSumBet(){
 	
-    sumBetNode.text = parseInt(betChoosen) * parseInt(figureChoosen); 
+    sumBetNode.text = parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator); 
 }
 
 function showFigure(){
@@ -215,17 +213,15 @@ function checkWin(){
 	if(gameStatus == gameStateCHECK_WIN) {
 		audio.pause();
 		audio = null;
-		//console.log("test",testFigure(figures_buttons[figureChoosen].figure));
 		if(checkAllSame(figures_buttons[figureChoosen].figure)){
-			showFigure(figureChoosen);
+			showFigure();
 			playSound('assets/sounds/win.mp3');
-       		creditValue +=  parseInt(betChoosen) * parseInt(figureChoosen);
+       		creditValue +=  parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator);
 		}else{
-			creditValue -=  parseInt(betChoosen) * parseInt(figureChoosen)
+			creditValue -=  parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator)
 		}
 		setCredit(creditValue);
 	}
-
 }
 
 function setCredit(credit){
@@ -250,7 +246,7 @@ function checkAllSame(figure) {
 }
 
 function hasMoney() {
-	if(creditValue < betChoosen * figureChoosen){
+	if(parseInt(creditValue) < parseInt(betChoosen) * parseInt(figures_buttons[figureChoosen].multiplicator)) {
         return false;
     }
     return true;
@@ -260,13 +256,4 @@ function playSound(x) {
     audio       = new Audio(x);
     audio.volume    = volume;
     audio.play();
-}
-
-function testFigure(figure) {
-	var pom = [];
-	for(var i in figure){
-		var coordinate = figure[i]; 
-		pom[i] = tile[coordinate.x][coordinate.y].value;
-	}
-	return pom;
 }
