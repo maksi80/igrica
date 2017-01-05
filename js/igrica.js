@@ -31,8 +31,8 @@ var figures = null;
 var audio = null;
 var volume  = 1;
 var msg = null;
-var marks = {};
-var marks_lose = {};
+var marks = [];
+var marks_lose = [];
 
 PIXI.loader.add('data', 'data/config.json')
 						//.on("progress", loadProgressHandler)
@@ -166,29 +166,21 @@ function showFigure(param) {
 		var coordinate = figures[i]; 
 		tile[coordinate.x][coordinate.y].tint = 0xFF00FF;
 		if(param == true){
-			//console.log(tile[coordinate.x][coordinate.y].x,tile[coordinate.x][coordinate.y].y);
-			marks[i] = new PIXI.Graphics();
-			marks[i].lineStyle(5, 0xA4CC00);
-			marks[i].drawCircle(100+tile[coordinate.x][coordinate.y].x+50, 120+tile[coordinate.x][coordinate.y].y+50, 40);
-			marks[i].endFill(); 
+			var obj = new PIXI.Graphics();
+			obj.lineStyle(5, 0xA4CC00);
+			obj.drawCircle(100+tile[coordinate.x][coordinate.y].x+50, 120+tile[coordinate.x][coordinate.y].y+50, 40);
+			obj.endFill(); 
+			marks.push(obj);
 			stage.addChild(marks[i]);
 		}else if(param == false) {
-			marks_lose[i] = new PIXI.Graphics();
-			marks_lose[i].lineStyle(5, 0xff0000);
-			marks_lose[i].moveTo(100+tile[coordinate.x][coordinate.y].x+5, 120+tile[coordinate.x][coordinate.y].y+5);
-        	marks_lose[i].lineTo(100+tile[coordinate.x][coordinate.y].x+100-5, 120+tile[coordinate.x][coordinate.y].y+100-5);
+			var obj = new PIXI.Graphics();
+			obj.lineStyle(5, 0xff0000);
+			obj.moveTo(100+tile[coordinate.x][coordinate.y].x+5, 120+tile[coordinate.x][coordinate.y].y+5);
+        	obj.lineTo(100+tile[coordinate.x][coordinate.y].x+100-5, 120+tile[coordinate.x][coordinate.y].y+100-5);
+        	marks_lose.push(obj);
         	stage.addChild(marks_lose[i]);
 		}
 	}
-
-	setTimeout( function() {
-		for(var i in figures){
-			stage.removeChild(marks[i]);
-			stage.removeChild(marks_lose[i]);
-			var coordinate = figures[i]; 
-			tile[coordinate.x][coordinate.y].tint = 16777215;
-		}
-	}, 2000);
 }
 
 function clear() {
@@ -196,6 +188,18 @@ function clear() {
 	    for (var i = 0; i < slotNumber; i++) {
 	    	tile[j][i].tint = 16777215;
 	    }
+	}
+	if(marks_lose.length){
+		for(var i = 0; i< marks_lose.length; i++){
+			stage.removeChild(marks_lose[i]);
+		}
+		marks_lose = [];
+	}
+	if(marks.length){
+		for(var i = 0; i< marks.length; i++){
+			stage.removeChild(marks[i]);
+		}
+		marks = [];
 	}
 }
 
